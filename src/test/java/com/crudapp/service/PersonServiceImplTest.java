@@ -3,6 +3,9 @@ package com.crudapp.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,11 +22,11 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 
-import com.crudapp.SpringbootCrudAppApplication;
+import com.crudapp.SpringbootCrudApplication;
 import com.crudapp.model.Person;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SpringbootCrudAppApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = SpringbootCrudApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application.properties")
 public class PersonServiceImplTest {
 
@@ -59,7 +62,7 @@ public class PersonServiceImplTest {
 	}
 
 	@Test
-	public void testInsertPresons() {
+	public void testInsertPersons() {
 		Person Person = new Person("admin", "admin","12/12/1993","madurai");
 		Person Person2 = new Person("admin", "admin","12/12/1993","madurai");
 	
@@ -76,7 +79,7 @@ public class PersonServiceImplTest {
 	
 	
 	@Test
-	public void testUpdatePresons() {
+	public void testUpdatePersons() {
 		int id = 1;
 		Person person = restTemplate.getForObject(getRootUrl() + "/crudapp/persons/" + id, Person.class);
 		person.setFirstName("userlogin");
@@ -105,41 +108,40 @@ public class PersonServiceImplTest {
 
 	@Test
 	public void testGetPersonById() {
-		testInsertPresons();
-		Person Person = restTemplate.getForObject(getRootUrl() + "/crudapp/persons/1", Person.class);
-		System.out.println(Person.getFirstName());
-		assertNotNull(Person);
+		testInsertPersons();
+		Person person = restTemplate.getForObject(getRootUrl() + "/crudapp/persons/1", Person.class);
+		System.out.println(person.getFirstName());
+		assertNotNull(person);
 	}
 
 	@Test
-	public void testDeletePresons() {
+	public void testDeletePersons() {
 		int id = 5;
-		Person Person = restTemplate.getForObject(getRootUrl() + "/crudapp/persons/" + id, Person.class);
-		assertNotNull(Person);
+		Person person = restTemplate.getForObject(getRootUrl() + "/crudapp/persons/" + id, Person.class);
+		assertNotNull(person);
 
 		restTemplate.delete(getRootUrl() + "/crudapp/persons/" + id);
 
 		try {
-			Person = restTemplate.getForObject(getRootUrl() + "/crudapp/persons/" + id, Person.class);
+			person = restTemplate.getForObject(getRootUrl() + "/crudapp/persons/" + id, Person.class);
 		} catch (final HttpClientErrorException e) {
 			assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
 		}
 	}
 
 	@Test
-	public void testGetPersonByFirstName() {
-		Person Person = restTemplate.getForObject(getRootUrl() + "/crudapp/persons/firstname/senthil", Person.class);
-		System.out.println(Person.getFirstName());
-		assertEquals("senthil", Person.getFirstName());
-		assertNotNull(Person);
+	public void testGetPersonByAnyName() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Accept", "application/json");
+		HttpEntity entity = new HttpEntity(headers);
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("fName", "senthil");
+		params.put("lname", "");
+		HttpEntity<Person> response=restTemplate.exchange(getRootUrl() + "/crudapp/persons/anyname",  HttpMethod.GET, entity, Person.class, params);
+		//Person person = restTemplate.getForObject(getRootUrl() + "/crudapp/persons/anyname", Person.class,params);
+		
+		assertNotNull(response);
 	}
 
-	@Test
-	public void testGetPersonByLastName() {
-		// restTemplate = new TestRestTemplate("user", "user");
-		Person Person = restTemplate.getForObject(getRootUrl() + "/crudapp/persons/lastname/senthil", Person.class);
-		System.out.println(Person.getFirstName());
-		assertEquals("senthil", Person.getLastName());
-		assertNotNull(Person);
-	}
+
 }

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.crudapp.exception.ResourceNotFoundException;
-import com.crudapp.model.Pets;
-import com.crudapp.service.PetsServiceImpl;
+import com.crudapp.model.Pet;
+import com.crudapp.service.PetServiceImpl;
 
 /**
  * 
@@ -28,34 +28,34 @@ import com.crudapp.service.PetsServiceImpl;
 public class PetsController {
 
 	@Autowired
-	private PetsServiceImpl petsServiceImpl;
+	private PetServiceImpl petsServiceImpl;
 
 	@GetMapping("/pets")
-	public List<Pets> getAllPets() {
-		List<Pets> petList = petsServiceImpl.getPets();
+	public List<Pet> getAllPets() {
+		List<Pet> petList = petsServiceImpl.getPets();
 		return petList;
 	}
 
 	@GetMapping("/pets/{petid}")
-	public Optional<Pets> getPetssById(@PathVariable(value = "petid") Long petId) {
+	public Optional<Pet> getPetsById(@PathVariable(value = "petid") Long petId) {
 		return petsServiceImpl.findPetsById(petId);
 	}
 
 	@PostMapping("/pets")
-	public Pets createPets(@RequestBody Pets pets) throws ResourceNotFoundException {
+	public Pet createPets(@RequestBody Pet pets) throws ResourceNotFoundException {
 		return petsServiceImpl.insertPet(pets);
 	}
 
 	@PutMapping("/pets/{petid}/persons/{personid}")
-	public Pets mappingPetToPerson(@PathVariable(value = "petid") Long petId,
+	public Pet mappingPetToPerson(@PathVariable(value = "petid") Long petId,
 			@PathVariable(value = "personid") Long personId) throws ResourceNotFoundException {		
 		return petsServiceImpl.mappingPetToPerson(petId, personId);
 	}
 
 	@PutMapping("/pets/{petid}")
-	public Pets updatePets(@PathVariable(value = "petid") Long petId, @RequestBody Pets petsRequest)
+	public Pet updatePets(@PathVariable(value = "petid") Long petId, @RequestBody Pet petsRequest)
 			throws ResourceNotFoundException {
-		Pets updatedPet = petsServiceImpl.updatePet(petId, petsRequest);
+		Pet updatedPet = petsServiceImpl.updatePet(petId, petsRequest);
 		return updatedPet;
 	}
 

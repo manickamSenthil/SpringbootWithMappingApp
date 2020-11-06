@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.crudapp.exception.ResourceNotFoundException;
 import com.crudapp.model.Person;
-import com.crudapp.model.Pets;
+import com.crudapp.model.Pet;
 import com.crudapp.repository.PersonRepository;
-import com.crudapp.repository.PetsRepository;
+import com.crudapp.repository.PetRepository;
 
 /****
  * 
@@ -25,23 +25,41 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private PersonRepository personRepository;
-	
+
 	@Autowired
-	private PetsRepository petsRepository;
-	
+	private PetRepository petsRepository;
+
 	@Autowired
-	private PetsServiceImpl petsServiceImpl;
+	private PetServiceImpl petsServiceImpl;
 
 	@Override
-	public List<Person> getPresons() {
+	public List<Person> getPersons() {
 		return personRepository.findAll();
+	}
+
+
+
+
+	public List<Person> getPersons(String fName, String lName) throws ResourceNotFoundException {
+		
+		if (!fName.isEmpty() && lName.isEmpty()) {
+			return personRepository.findByFirstNameIgnoreCase(fName);
+			
+		} else if (fName.isEmpty() && !lName.isEmpty()) {
+			return personRepository.findByLastNameIgnoreCase(lName);
+		
+		}else if(!fName.isEmpty() && !lName.isEmpty()) {
+			return personRepository.findByFirstNameAndLastNameIgnoreCase(fName, lName);
+			
+		}
+		return null;
 	}
 
 	/****
 	 * insert person
 	 */
 	@Override
-	public Person insertPresons(Person person) throws ResourceNotFoundException {
+	public Person insertPersons(Person person) throws ResourceNotFoundException {
 		Person insertPerson = personRepository.save(person);
 		return insertPerson;
 	}
@@ -50,7 +68,7 @@ public class PersonServiceImpl implements PersonService {
 	 * update person details
 	 */
 	@Override
-	public Person updatePresons(Long personId, Person personDetails) throws ResourceNotFoundException {
+	public Person updatePersons(Long personId, Person personDetails) throws ResourceNotFoundException {
 		Person person = personRepository.findById(personId)
 				.orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personId));
 
@@ -73,14 +91,14 @@ public class PersonServiceImpl implements PersonService {
 	 * delete person
 	 */
 	@Override
-	public Map<String, Boolean> deletePresons(Long personId) throws ResourceNotFoundException {
+	public Map<String, Boolean> deletePersons(Long personId) throws ResourceNotFoundException {
 		Person person = personRepository.findById(personId)
 				.orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personId));
-		
-		List<Pets> pet=petsRepository.findByPersonId(personId);
-		
-		if(!pet.isEmpty()) {
-			pet.stream().forEach(f->{
+
+		List<Pet> pet = petsRepository.findByPersonId(personId);
+
+		if (!pet.isEmpty()) {
+			pet.stream().forEach(f -> {
 				try {
 					petsServiceImpl.deletePet(f.getId());
 				} catch (ResourceNotFoundException e) {
@@ -88,7 +106,7 @@ public class PersonServiceImpl implements PersonService {
 				}
 			});
 		}
-		
+
 		personRepository.delete(person);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
@@ -102,7 +120,7 @@ public class PersonServiceImpl implements PersonService {
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-	public Person getPresonsByid(Long personId) throws ResourceNotFoundException {
+	public Person getPersonsByid(Long personId) throws ResourceNotFoundException {
 		Person person = personRepository.findById(personId)
 				.orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personId));
 		return person;
@@ -115,9 +133,9 @@ public class PersonServiceImpl implements PersonService {
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-	public List<Person> findByPersonName(String name) throws ResourceNotFoundException {
-		List<Person> byFirstName = personRepository.findByFirstName(name);
-		List<Person> byLastName = personRepository.findByLastName(name);
+	public List<Person> findByPersonFnameOrLname(String name) throws ResourceNotFoundException {
+		List<Person> byFirstName = personRepository.findByFirstNameIgnoreCase(name);
+		List<Person> byLastName = personRepository.findByLastNameIgnoreCase(name);
 		byFirstName.addAll(byLastName);
 		return byFirstName;
 	}
@@ -130,8 +148,8 @@ public class PersonServiceImpl implements PersonService {
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-	public List<Person> findByPersonBothName(String firstName, String lastName) throws ResourceNotFoundException {
-		return personRepository.findByFirstNameAndLastName(firstName, lastName);
+	public List<Person> findByPersonFnameAndLname(String firstName, String lastName) throws ResourceNotFoundException {
+		return personRepository.findByFirstNameAndLastNameIgnoreCase(firstName, lastName);
 	}
 
 }

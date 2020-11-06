@@ -15,10 +15,10 @@ import com.crudapp.model.Person;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
-	List<Person> findByFirstName(String firstName);
+	List<Person> findByFirstNameIgnoreCase(String firstName);
 
-	List<Person> findByLastName(String firstname);
+	List<Person> findByLastNameIgnoreCase(String firstname);
 
-	List<Person> findByFirstNameAndLastName(String firstName, String lastName);
+	List<Person> findByFirstNameAndLastNameIgnoreCase(String firstName, String lastName);
 
 }

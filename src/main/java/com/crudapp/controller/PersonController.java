@@ -33,46 +33,40 @@ public class PersonController {
 
 	@GetMapping("/persons")
 	public List<Person> getAllPersons() {
-		return personServiceImpl.getPresons();
+		return personServiceImpl.getPersons();
 	}
 
 	@GetMapping("/persons/{id}")
 	public ResponseEntity<Person> getPersonById(@PathVariable(value = "id") Long personId)
 			throws ResourceNotFoundException {
-		Person person = personServiceImpl.getPresonsByid(personId);
+		Person person = personServiceImpl.getPersonsByid(personId);
 		return ResponseEntity.ok().body(person);
 	}
 
 	@PostMapping("/persons")
 	public Person createPerson(@RequestBody Person person) throws ResourceNotFoundException {
-		Person insertPerson = personServiceImpl.insertPresons(person);
+		Person insertPerson = personServiceImpl.insertPersons(person);
 		return insertPerson;
 	}
 
 	@PutMapping("/persons/{id}")
 	public ResponseEntity<Person> updatePerson(@PathVariable(value = "id") Long personId,
 			@RequestBody Person personDetails) throws ResourceNotFoundException {
-		Person updatedPersondetail = personServiceImpl.updatePresons(personId, personDetails);
+		Person updatedPersondetail = personServiceImpl.updatePersons(personId, personDetails);
 		return ResponseEntity.ok(updatedPersondetail);
 	}
 
 	@DeleteMapping("/persons/{id}")
 	public Map<String, Boolean> deletePerson(@PathVariable(value = "id") Long personId)
 			throws ResourceNotFoundException {
-		Map<String, Boolean> deleted = personServiceImpl.deletePresons(personId);
+		Map<String, Boolean> deleted = personServiceImpl.deletePersons(personId);
 		return deleted;
 	}
 
-	@GetMapping("/persons/getbyfnameorlname/{name}")
-	public List<Person> getPersonByName(@PathVariable(value = "name") String name) throws ResourceNotFoundException {
-		List<Person> byFirstName = personServiceImpl.findByPersonName(name);
-		return byFirstName;
-	}
-
-	@GetMapping("/persons/getbyfnameandlname")
-	public List<Person> getPersonByBothName(@RequestParam(name = "firstname") String firstName,
-			@RequestParam(name = "lastname") String lastName) throws ResourceNotFoundException {
-		return personServiceImpl.findByPersonBothName(firstName, lastName);
+	@GetMapping("/persons/anyname")
+	public List<Person> getByAnyName(@RequestParam(name = "fName" ,required = false,defaultValue = "") String fName,
+			@RequestParam(name = "lName" ,required = false,defaultValue = "") String lName) throws ResourceNotFoundException {
+		return personServiceImpl.getPersons(fName, lName);
 	}
 
 }

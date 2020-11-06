@@ -17,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "pets")
-public class Pets {
+public class Pet {
 
 	private long id;
 	private String petName;
@@ -25,7 +25,7 @@ public class Pets {
 	private Person person;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long getId() {
 		return id;
 	}
@@ -34,11 +34,11 @@ public class Pets {
 		this.id = id;
 	}
 
-	public Pets() {
+	public Pet() {
 
 	}
 
-	public Pets(String petName, String petAge) {
+	public Pet(String petName, String petAge) {
 		this.petName = petName;
 		this.petAge = petAge;
 
@@ -74,7 +74,7 @@ public class Pets {
 
 	@Override
 	public String toString() {
-		return "Pets [id=" + id + ", petName=" + petName + ", petAge=" + petAge + "]";
+		return "Pet [id=" + id + ", petName=" + petName + ", petAge=" + petAge + ", person=" + person + "]";
 	}
 
 }

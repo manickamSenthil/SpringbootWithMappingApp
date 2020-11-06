@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.crudapp.model.Pets;
+import com.crudapp.model.Pet;
 
 /***
  * 
@@ -14,10 +14,10 @@ import com.crudapp.model.Pets;
  *
  */
 @Repository
-public interface PetsRepository extends JpaRepository<Pets, Long> {
+public interface PetRepository extends JpaRepository<Pet, Long> {
 
-	Optional<Pets> findByIdAndPersonId(Long petsId, Long personId);
+	Optional<Pet> findByIdAndPersonId(Long petId, Long personId);
 
-	List<Pets> findByPersonId(Long personId);
+	List<Pet> findByPersonId(Long personId);
 
 }

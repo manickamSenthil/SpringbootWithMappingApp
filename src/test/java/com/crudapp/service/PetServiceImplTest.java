@@ -18,13 +18,13 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 
-import com.crudapp.SpringbootCrudAppApplication;
-import com.crudapp.model.Pets;
+import com.crudapp.SpringbootCrudApplication;
+import com.crudapp.model.Pet;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SpringbootCrudAppApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = SpringbootCrudApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application.properties")
-public class PetsServiceImplTest {
+public class PetServiceImplTest {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -61,10 +61,10 @@ public class PetsServiceImplTest {
 	public void testInsertPet() {
 		// restTemplate = new TestRestTemplate("user", "user");
 
-		Pets pets = new Pets();
+		Pet pets = new Pet();
 		pets.setPetAge("5");
 		pets.setPetName("Tom");
-		ResponseEntity<Pets> postResponse = restTemplate.postForEntity(getRootUrl() + "/crudapp/pets", pets, Pets.class);
+		ResponseEntity<Pet> postResponse = restTemplate.postForEntity(getRootUrl() + "/crudapp/pets", pets, Pet.class);
 		assertNotNull(postResponse);
 		assertNotNull(postResponse.getBody());
 	}
@@ -74,12 +74,12 @@ public class PetsServiceImplTest {
 		// restTemplate = new TestRestTemplate("user", "user");
 		testInsertPet();
 		int id = 1;
-		Pets pet = restTemplate.getForObject(getRootUrl() + "/crudapp/pets/" + id, Pets.class);
+		Pet pet = restTemplate.getForObject(getRootUrl() + "/crudapp/pets/" + id, Pet.class);
 		pet.setPetName("Tom");
 		pet.setPetAge("13");
 		restTemplate.put(getRootUrl() + "/crudapp/pets/" + id, pet);
 
-		Pets updatedPet = restTemplate.getForObject(getRootUrl() + "/crudapp/pets/" + id, Pets.class);
+		Pet updatedPet = restTemplate.getForObject(getRootUrl() + "/crudapp/pets/" + id, Pet.class);
 		assertEquals("Tom", updatedPet.getPetName());
 		assertNotNull(updatedPet);
 	}
@@ -98,7 +98,7 @@ public class PetsServiceImplTest {
 	@Test
 	public void testGetPetById() {
 		testInsertPet();
-		Pets pet = restTemplate.getForObject(getRootUrl() + "/crudapp/pets/1", Pets.class);
+		Pet pet = restTemplate.getForObject(getRootUrl() + "/crudapp/pets/1", Pet.class);
 		System.out.println(pet.getPetName());
 		assertNotNull(pet);
 	}
@@ -107,13 +107,13 @@ public class PetsServiceImplTest {
 	public void testDeletePet() {
 		testInsertPet();
 		int id = 5;
-		Pets pet = restTemplate.getForObject(getRootUrl() + "/crudapp/pets/" + id, Pets.class);
+		Pet pet = restTemplate.getForObject(getRootUrl() + "/crudapp/pets/" + id, Pet.class);
 		assertNotNull(pet);
 
 		restTemplate.delete(getRootUrl() + "/crudapp/pets/" + id);
 
 		try {
-			pet = restTemplate.getForObject(getRootUrl() + "/crudapp/pets/" + id, Pets.class);
+			pet = restTemplate.getForObject(getRootUrl() + "/crudapp/pets/" + id, Pet.class);
 		} catch (final HttpClientErrorException e) {
 			assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
 		}

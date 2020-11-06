@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.crudapp.exception.ResourceNotFoundException;
-import com.crudapp.model.Pets;
+import com.crudapp.model.Pet;
 import com.crudapp.repository.PersonRepository;
-import com.crudapp.repository.PetsRepository;
+import com.crudapp.repository.PetRepository;
 
 /****
  * *
@@ -20,10 +20,10 @@ import com.crudapp.repository.PetsRepository;
  *
  */
 @Service
-public class PetsServiceImpl implements PetsService {
+public class PetServiceImpl implements PetService {
 
 	@Autowired
-	private PetsRepository petsRepository;
+	private PetRepository petRepository;
 
 	@Autowired
 	private PersonRepository personRepository;
@@ -32,31 +32,31 @@ public class PetsServiceImpl implements PetsService {
 	 * get all pets
 	 */
 	@Override
-	public List<Pets> getPets() {
-		return petsRepository.findAll();
+	public List<Pet> getPets() {
+		return petRepository.findAll();
 	}
 
 	/***
 	 * insert the pet
 	 */
 	@Override
-	public Pets insertPet(Pets pet) throws ResourceNotFoundException {
-		return petsRepository.save(pet);
+	public Pet insertPet(Pet pet) throws ResourceNotFoundException {
+		return petRepository.save(pet);
 	}
 
 	/*****
 	 * update the pets
 	 */
 	@Override
-	public Pets updatePet(Long petId, Pets petDetails) throws ResourceNotFoundException {
-		if (!petsRepository.existsById(petId)) {
-			throw new ResourceNotFoundException("petsId not found");
+	public Pet updatePet(Long petId, Pet petDetails) throws ResourceNotFoundException {
+		if (!petRepository.existsById(petId)) {
+			throw new ResourceNotFoundException("petId not found");
 		}
-		return petsRepository.findById(petId).map(pets -> {
+		return petRepository.findById(petId).map(pets -> {
 			pets.setPetName(petDetails.getPetName());
 			pets.setPetAge(petDetails.getPetAge());
-			return petsRepository.save(pets);
-		}).orElseThrow(() -> new ResourceNotFoundException("Pets id not found"));
+			return petRepository.save(pets);
+		}).orElseThrow(() -> new ResourceNotFoundException("PetId not found"));
 	}
 
 	/***
@@ -65,12 +65,12 @@ public class PetsServiceImpl implements PetsService {
 	@Override
 	public Map<String, Boolean> deletePet(Long petId) throws ResourceNotFoundException {
 
-		return petsRepository.findById(petId).map(pets -> {
-			petsRepository.delete(pets);
+		return petRepository.findById(petId).map(pets -> {
+			petRepository.delete(pets);
 			Map<String, Boolean> response = new HashMap<>();
 			response.put("deleted", Boolean.TRUE);
 			return response;
-		}).orElseThrow(() -> new ResourceNotFoundException("Pets not found with pet id " + petId));
+		}).orElseThrow(() -> new ResourceNotFoundException("Pet not found for petId " + petId));
 	}
 
 	/***
@@ -79,8 +79,8 @@ public class PetsServiceImpl implements PetsService {
 	 * @param petId
 	 * @return
 	 */
-	public Optional<Pets> findPetsById(Long petId) {
-		return petsRepository.findById(petId);
+	public Optional<Pet> findPetsById(Long petId) {
+		return petRepository.findById(petId);
 	}
 
 	/**
@@ -91,16 +91,16 @@ public class PetsServiceImpl implements PetsService {
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-	public Pets mappingPetToPerson(Long petId, Long personId) throws ResourceNotFoundException {
-		if (!petsRepository.existsById(petId) || !personRepository.existsById(personId)) {
+	public Pet mappingPetToPerson(Long petId, Long personId) throws ResourceNotFoundException {
+		if (!petRepository.existsById(petId) || !personRepository.existsById(personId)) {
 			throw new ResourceNotFoundException("petId or personId is not found");
 		}
-		Pets petDetail = petsRepository.findById(petId)
-				.orElseThrow(() -> new ResourceNotFoundException("pets not found"));
+		Pet petDetail = petRepository.findById(petId)
+				.orElseThrow(() -> new ResourceNotFoundException("pet not found"));
 
 		return personRepository.findById(personId).map(person -> {
 			petDetail.setPerson(person);
-			return petsRepository.save(petDetail);
+			return petRepository.save(petDetail);
 		}).orElseThrow(() -> new ResourceNotFoundException("person not found"));
 
 	}

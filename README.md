@@ -19,10 +19,11 @@ H2 database: http://localhost:8090/h2-console/
 
 GET API:
 getting person details : http://localhost:8090/crudapp/persons 
-getting single person detail : http://localhost:8090/crudapp/persons/{personid}
-getting person detail using fname and lname : http://localhost:8090/crudapp/persons/getbyfnameandlname?firstname=senthil&lastname=manickam 
-getting person detail using fname or lname : http://localhost:8090/crudapp/persons/getbyfnameorlname/manickam
-getting single pet detail : http://localhost:8090/crudapp/pets/{petid}
+getting single person details : http://localhost:8090/crudapp/persons/{personid}
+getting person details using anyName (FirstName or/and Lastname): 
+http://localhost:8090/crudapp/persons/anyname?fName=senthil&lName=manickam 
+
+getting single pet details : http://localhost:8090/crudapp/pets/{petid}
 getting pet details: http://localhost:8090/crudapp/pets
 
 
