@@ -83,18 +83,26 @@ public class PetsServiceImpl implements PetsService {
 		return petsRepository.findById(petId);
 	}
 
-	/***
+	/**
+	 * Linking pet to person
 	 * 
+	 * @param petId
 	 * @param personId
-	 * @param pets
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-	public Pets insertPetWithPerson(Long personId, Pets pets) throws ResourceNotFoundException {
+	public Pets mappingPetToPerson(Long petId, Long personId) throws ResourceNotFoundException {
+		if (!petsRepository.existsById(petId) || !personRepository.existsById(personId)) {
+			throw new ResourceNotFoundException("petId or personId is not found");
+		}
+		Pets petDetail = petsRepository.findById(petId)
+				.orElseThrow(() -> new ResourceNotFoundException("pets not found"));
+
 		return personRepository.findById(personId).map(person -> {
-			pets.setPerson(person);
-			return petsRepository.save(pets);
+			petDetail.setPerson(person);
+			return petsRepository.save(petDetail);
 		}).orElseThrow(() -> new ResourceNotFoundException("person not found"));
+
 	}
 
 }

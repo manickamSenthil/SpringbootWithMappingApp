@@ -46,10 +46,10 @@ public class PetsController {
 		return petsServiceImpl.insertPet(pets);
 	}
 
-	@PostMapping("/pets/persons/{personId}")
-	public Pets createPetsWithPerson(@PathVariable(value = "personId") Long personId, @RequestBody Pets pets)
-			throws ResourceNotFoundException {
-		return petsServiceImpl.insertPetWithPerson(personId, pets);
+	@PutMapping("/pets/{petid}/persons/{personid}")
+	public Pets mappingPetToPerson(@PathVariable(value = "petid") Long petId,
+			@PathVariable(value = "personid") Long personId) throws ResourceNotFoundException {		
+		return petsServiceImpl.mappingPetToPerson(petId, personId);
 	}
 
 	@PutMapping("/pets/{petid}")
