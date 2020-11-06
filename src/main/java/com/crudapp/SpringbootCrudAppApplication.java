@@ -6,10 +6,10 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages = "com.crudapp")
 @SpringBootApplication
-public class SpringbootCurdAppApplication {
+public class SpringbootCrudAppApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringbootCurdAppApplication.class, args);
+		SpringApplication.run(SpringbootCrudAppApplication.class, args);
 	}
 
 }

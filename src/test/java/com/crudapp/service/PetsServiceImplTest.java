@@ -18,11 +18,11 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 
-import com.crudapp.SpringbootCurdAppApplication;
+import com.crudapp.SpringbootCrudAppApplication;
 import com.crudapp.model.Pets;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SpringbootCurdAppApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = SpringbootCrudAppApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application.properties")
 public class PetsServiceImplTest {
 
