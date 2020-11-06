@@ -8,10 +8,10 @@
 		<version>2.3.5.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.curdapp</groupId>
-	<artifactId>SpringbootCurdApp</artifactId>
+	<groupId>com.crudapp</groupId>
+	<artifactId>SpringbootCrudApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SpringbootCurdApp</name>
+	<name>SpringbootCrudApp</name>
 	<description>project for Spring Boot</description>
 
 	<properties>
