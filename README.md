@@ -1,4 +1,4 @@
-# SpringbootWithMappingApp Test
+# SpringbootWithMappingApp
 
 There are two roles
 admin (ALL rights)
